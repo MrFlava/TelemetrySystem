@@ -2,7 +2,7 @@ import uvicorn
 import argparse
 
 from telemetry_sink.settings import APP_HOST, APP_PORT
-from telemetry_sink.service import app
+from telemetry_sink.app import app
 
 def run_server(host, port):
     uvicorn.run(app, host=host, port=port)
