@@ -42,3 +42,26 @@ async def periodic_flusher(buffer, buffer_lock, log_file, flush_interval_ms):
     while True:
         await asyncio.sleep(interval)
         await flush_buffer(buffer, buffer_lock, log_file)
+
+
+async def flush_buffer_encrypted(buffer, buffer_lock, log_file, fernet):
+    async with buffer_lock:
+        if not buffer:
+            return
+        to_flush = buffer.copy()
+        buffer.clear()
+    lines = []
+    for item in to_flush:
+        raw = json.dumps(item, ensure_ascii=False)
+        encrypted = fernet.encrypt(raw.encode("utf-8"))
+        lines.append(encrypted.decode("utf-8") + "\n")
+    def _sync_write():
+        with open(log_file, "a", encoding="utf-8") as f:
+            f.writelines(lines)
+    await asyncio.to_thread(_sync_write)
+
+async def periodic_flusher_encrypted(buffer, buffer_lock, log_file, interval_ms, encryptor):
+    interval = max(0.001, interval_ms / 1000.0)
+    while True:
+        await asyncio.sleep(interval)
+        await flush_buffer_encrypted(buffer, buffer_lock, log_file, encryptor)

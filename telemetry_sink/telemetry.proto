@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package telemetry;
+
+service Telemetry {
+  rpc SendTelemetry (TelemetryRequest) returns (TelemetryResponse);
+}
+
+message TelemetryRequest {
+  string sensor_name = 1;
+  int32 sensor_value = 2;
+  string timestamp = 3;
+}
+
+message TelemetryResponse {
+  string status = 1;
+}
