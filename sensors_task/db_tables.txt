@@ -1,0 +1,28 @@
+CREATE TABLE rooms (
+    id SERIAL PRIMARY KEY,
+    name TEXT UNIQUE NOT NULL
+);
+
+CREATE TABLE sensor_types (
+    id SERIAL PRIMARY KEY,
+    name TEXT UNIQUE NOT NULL
+);
+
+
+CREATE TABLE sensors (
+    id SERIAL PRIMARY KEY,
+    room_id INTEGER NOT NULL,
+    type_id INTEGER NOT NULL,
+    name TEXT,
+    FOREIGN KEY (room_id) REFERENCES rooms(id) ON DELETE CASCADE,
+    FOREIGN KEY (type_id) REFERENCES sensor_types(id) ON DELETE CASCADE
+);
+
+
+CREATE TABLE measurements (
+    id BIGSERIAL PRIMARY KEY,
+    sensor_id INTEGER NOT NULL,
+    value DOUBLE PRECISION NOT NULL,
+    ts TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    FOREIGN KEY (sensor_id) REFERENCES sensors(id) ON DELETE CASCADE,
+);
