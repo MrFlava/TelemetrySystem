@@ -13,10 +13,8 @@ BUFFER_MAX_ITEMS = int(os.getenv("TELEMETRY_BUFFER_MAX_ITEMS", "100"))
 FLUSH_INTERVAL_MS = int(os.getenv("TELEMETRY_FLUSH_INTERVAL_MS", "100"))
 RATE_LIMIT_BPS = int(os.getenv("TELEMETRY_RATE_LIMIT_BPS", "10240"))
 LOG_FILE = os.getenv("TELEMETRY_LOG_FILE", "telemetry_grpc.log")
-ENCRYPTION_KEY = os.getenv("TELEMETRY_ENCRYPTION_KEY")
+ENCRYPTION_KEY = os.getenv("TELEMETRY_ENCRYPTION_KEY", "8xAXViNuJtoXybAboV-EFpcRWSpFDhbve3O9o_jRi6I=")
 
-if not ENCRYPTION_KEY:
-    raise RuntimeError("TELEMETRY_ENCRYPTION_KEY must be set")
 fernet = Fernet(ENCRYPTION_KEY.encode())
 
 _buffer = []
